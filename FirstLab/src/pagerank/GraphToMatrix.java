@@ -2,6 +2,7 @@ package pagerank;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.StringTokenizer;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
@@ -29,35 +30,53 @@ public class GraphToMatrix {
 
 	static class Map extends Mapper<LongWritable, Text, IntWritable, IntWritable> {
 		
-		
+		private IntWritable node = new IntWritable();
+		private IntWritable word = new IntWritable();
 		
 		protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException{
 			
-			throw new UnsupportedOperationException("Implementation missing");	
+			//throw new UnsupportedOperationException("Implementation missing");	
 			
-			// DÃ©but d'implÃ©mentation de map
-			
-			
+			// Début d'implémentation de map
 			
 			
+			StringTokenizer itr = new StringTokenizer(value.toString());
+			ArrayList<String> tokenList = new ArrayList<String>();
+			
+			while (itr.hasMoreTokens()){
+				tokenList.add(itr.nextToken());
+			}
+			
+			if(tokenList.size() == 2){
+			node.set(Integer.parseInt(tokenList.get(0)));
+			word.set(Integer.parseInt(tokenList.get(1)));
+			}
+			context.write(node, word);		
 		}
 	}
 
 	static class Reduce extends Reducer<IntWritable, IntWritable, NullWritable, Text> {
 
+		NullWritable nw = NullWritable.get();
+		
 		protected void reduce(IntWritable key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException{
 
 			throw new UnsupportedOperationException("Implementation missing");
 			
-			// DÃ©but d'implÃ©mentation de reduce
+			// Début d'implémentation de reduce
+			/*Iterator<IntWritable> iterator=values.iterator();
+			  if (iterator.hasNext() == false) {
+				return;
+			  }
+			  
+			String text = new String();
+			int valuesLength = values.size();
 			
-			int sum = 0;
-			int result = 0;
 			for(IntWritable val:values){
-			sum += val.get();
+			text = text + val.toString() + key.toString() + (1/valuesLength).toString();
 			}
-			result.set(sum);
-			context.write(key,one);
+			
+			context.write(nw, text);*/
 			
 		}
 	} 
